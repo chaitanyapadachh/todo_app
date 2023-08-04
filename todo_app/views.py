@@ -1,7 +1,8 @@
 from typing import Any, Dict
 from django.db.models.query import QuerySet
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.contrib import messages
 
 from .models import ToDoItem, ToDoList
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -31,10 +32,24 @@ class ListCreate(CreateView):
     model = ToDoList
     fields = ["title"]
 
-    def get_context_data(self):
-        context = super(ListCreate, self).get_context_data()
-        context["title"] = "Add a New List"
+    def form_valid(self, form):
+        # Check if a ToDoList with the provided title already exists
+        title = form.cleaned_data["title"]
+        if ToDoList.objects.filter(title=title).exists():
+            # Display an error message to the user
+            messages.error(
+                self.request, f"A list with the name '{title}' already exists."
+            )
+            return self.form_invalid(form)
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context["title"] = "Add a new list"
         return context
+
+    def get_success_url(self):
+        return reverse("list", args=[self.object.id])
 
 
 class ItemCreate(CreateView):
@@ -70,3 +85,20 @@ class ItemUpdate(UpdateView):
 
     def get_success_url(self) -> str:
         return reverse("list", args=[self.object.todo_list_id])
+
+
+class ListDelete(DeleteView):
+    model = ToDoList
+    success_url = reverse_lazy("index")
+
+
+class ItemDelete(DeleteView):
+    model = ToDoItem
+
+    def get_success_url(self, **kwargs):
+        return reverse_lazy("list", args=[self.kwargs["list_id"]])
+
+    def context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["todo_list"] = self.object.todo_list
+        return context
