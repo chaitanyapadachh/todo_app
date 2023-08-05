@@ -7,24 +7,13 @@ from django.contrib import messages
 from .models import ToDoItem, ToDoList
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.views import LoginView,LogoutView
-from todo_app.forms import SignUpForm,LoginForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
 
 
 # Create your views here.
-class CustomLogoutView(LogoutView):
-    next_page = reverse_lazy("login")
 
-class CustomLoginView(LoginView):
-    form_class = LoginForm
-    template_name = "todo_app/login.html"
-    success_url = reverse_lazy("index")
-class SignUpView(CreateView):
-    form_class = SignUpForm
-    success_url = reverse_lazy('login')
-    template_name = 'todo_app/signup.html'
 @method_decorator(login_required, name='dispatch')
 class ListListView(ListView):
     model = ToDoList
