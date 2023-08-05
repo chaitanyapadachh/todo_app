@@ -1,0 +1,34 @@
+AWS: Add HTTP and HTTPS inbound and outbound rules
+Add www.subdomain and subdomain.... records to hosted zone
+Install Nginx
+sudo apt update
+sudo apt install nginx
+sudo vi /etc/nginx/sites-available/yoursubdomain.example.com
+server {
+    listen 80;
+    server_name yoursubdomain.example.com www.yoursubdomain.example.com;
+
+    location / {
+        proxy_pass http:/0.0.0.0:8000;  # Forward requests to your Django app
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+
+
+sudo ln -s /etc/nginx/sites-available/yoursubdomain.example.com /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo service nginx restart
+
+
+This should start HTTPS connections
+Add aliases for ease of use
+
+Certbot
+sudo apt update
+sudo apt install certbot python3-certbot-nginx
+
+sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+sudo nginx -t
+sudo service nginx restart
