@@ -115,6 +115,7 @@ USE_TZ = True
 SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
+LOGIN_REDIRECT_URL = 'index'
 
 
 # Static files (CSS, JavaScript, Images)

@@ -6,15 +6,31 @@ from django.contrib import messages
 
 from .models import ToDoItem, ToDoList
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.views import LoginView,LogoutView
+from todo_app.forms import SignUpForm,LoginForm
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
+
 
 # Create your views here.
+class CustomLogoutView(LogoutView):
+    next_page = reverse_lazy("login")
 
-
+class CustomLoginView(LoginView):
+    form_class = LoginForm
+    template_name = "todo_app/login.html"
+    success_url = reverse_lazy("index")
+class SignUpView(CreateView):
+    form_class = SignUpForm
+    success_url = reverse_lazy('login')
+    template_name = 'todo_app/signup.html'
+@method_decorator(login_required, name='dispatch')
 class ListListView(ListView):
     model = ToDoList
     template_name = "todo_app/index.html"
 
-
+@method_decorator(login_required, name='dispatch')
 class ItemListView(ListView):
     model = ToDoItem
     template_name = "todo_app/todo_list.html"
@@ -27,7 +43,7 @@ class ItemListView(ListView):
         context["todo_list"] = ToDoList.objects.get(id=self.kwargs["list_id"])
         return context
 
-
+@method_decorator(login_required, name='dispatch')
 class ListCreate(CreateView):
     model = ToDoList
     fields = ["title"]
@@ -52,6 +68,7 @@ class ListCreate(CreateView):
         return reverse("list", args=[self.object.id])
 
 
+@method_decorator(login_required, name='dispatch')
 class ItemCreate(CreateView):
     model = ToDoItem
     fields = ["todo_list", "title", "description", "due_date"]
@@ -72,7 +89,7 @@ class ItemCreate(CreateView):
     def get_success_url(self) -> str:
         return reverse("list", args=[self.object.todo_list_id])
 
-
+@method_decorator(login_required, name='dispatch')
 class ItemUpdate(UpdateView):
     model = ToDoItem
     fields = ["todo_list", "title", "description", "due_date"]
@@ -87,11 +104,14 @@ class ItemUpdate(UpdateView):
         return reverse("list", args=[self.object.todo_list_id])
 
 
+@method_decorator(login_required, name='dispatch')
 class ListDelete(DeleteView):
     model = ToDoList
     success_url = reverse_lazy("index")
 
 
+
+@method_decorator(login_required, name='dispatch')
 class ItemDelete(DeleteView):
     model = ToDoItem
 
