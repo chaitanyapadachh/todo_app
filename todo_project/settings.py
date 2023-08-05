@@ -118,7 +118,7 @@ CSRF_COOKIE_SECURE = False
 LOGIN_REDIRECT_URL = 'index'
 
 CSRF_TRUSTED_ORIGINS = [
-    "*"]
+    "https://wwww.todo.stone-hedge-tech.com","https://todo.stone-hedge-tech.com"]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
