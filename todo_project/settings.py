@@ -23,9 +23,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure--bzy5e_nr%g8bwi&2#wax&#&@2-qa#--*5*+g$o%1z2a!))+qn"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    "todo.stone-hedge-tech.com",
+    "www.todo.stone-hedge-tech.com",
+    "localhost",
+    "127.0.0.1",
+]
 
 
 # Application definition
@@ -118,11 +123,14 @@ USE_TZ = True
 SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
-LOGIN_REDIRECT_URL = 'index'
+LOGIN_REDIRECT_URL = "index"
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://wwww.todo.stone-hedge-tech.com","https://todo.stone-hedge-tech.com",
-    'https://*.0.0.0.0',"https://*.stone-hedge-tech.com"]
+    "https://wwww.todo.stone-hedge-tech.com",
+    "https://todo.stone-hedge-tech.com",
+    "https://*.0.0.0.0",
+    "https://*.stone-hedge-tech.com",
+]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 

@@ -10,13 +10,20 @@ def one_week_hence():
 
 
 class ToDoList(models.Model):
-    title = models.CharField(max_length=250, unique=True)
+    title = models.CharField(max_length=250)
+    owner = models.ForeignKey(
+        "auth.User", related_name="todo_lists", on_delete=models.CASCADE
+    )
 
     def get_abolute_url(self):
         return reverse("list", args=[self.id])
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        ordering = ["title"]
+        unique_together = ["title", "owner"]
 
 
 class ToDoItem(models.Model):
@@ -27,6 +34,9 @@ class ToDoItem(models.Model):
     todo_list = models.ForeignKey(ToDoList, on_delete=models.CASCADE)
     is_completed = models.BooleanField(default=False)
     completed_date = models.DateTimeField(blank=True, null=True)
+    owner = models.ForeignKey(
+        "auth.User", related_name="todo_items", on_delete=models.CASCADE
+    )
 
     def get_absolute_url(self):
         return reverse("item-update", args=[str(self.todo_list.id), str(self.id)])
@@ -35,4 +45,4 @@ class ToDoItem(models.Model):
         return f"{self.title}: due {self.due_date.strftime('%d %b %Y %H:%M')}"
 
     class Meta:
-        ordering = ["is_completed","due_date"]
+        ordering = ["is_completed", "due_date"]
