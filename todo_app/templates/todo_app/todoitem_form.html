@@ -22,6 +22,10 @@
             type="button"
             onclick="location.href=
             '{% url "item-delete" todo_list.id object.id %}'">
+        <input
+        value="Mark as done"
+        type="button"
+        onclick="location.href='{% url "item-mark-done" todo_list.id object.id %}'">
     {% endif %}
 </form>
 

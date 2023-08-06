@@ -18,4 +18,6 @@ urlpatterns = [
         views.ItemDelete.as_view(),
         name="item-delete",
     ),
+
+    path('list/<int:list_id>/item/<int:item_id>/mark-done/', views.mark_item_done, name='item-mark-done'),
 ]

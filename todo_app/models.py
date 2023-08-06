@@ -25,6 +25,8 @@ class ToDoItem(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     due_date = models.DateTimeField(default=one_week_hence)
     todo_list = models.ForeignKey(ToDoList, on_delete=models.CASCADE)
+    is_completed = models.BooleanField(default=False)
+    completed_date = models.DateTimeField(blank=True, null=True)
 
     def get_absolute_url(self):
         return reverse("item-update", args=[str(self.todo_list.id), str(self.id)])
@@ -33,4 +35,4 @@ class ToDoItem(models.Model):
         return f"{self.title}: due {self.due_date.strftime('%d %b %Y %H:%M')}"
 
     class Meta:
-        ordering = ["due_date"]
+        ordering = ["is_completed","due_date"]

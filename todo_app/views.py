@@ -9,6 +9,8 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.views import LoginView,LogoutView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+import datetime as dt
+from django.shortcuts import redirect,get_object_or_404
 
 
 
@@ -111,3 +113,13 @@ class ItemDelete(DeleteView):
         context = super().get_context_data(**kwargs)
         context["todo_list"] = self.object.todo_list
         return context
+
+@login_required
+def mark_item_done(request, list_id, item_id):
+    
+
+    todo_item = get_object_or_404(ToDoItem, todo_list_id=list_id, id=item_id)
+    todo_item.is_completed = True
+    todo_item.completed_date = dt.datetime.now()
+    todo_item.save()
+    return redirect("item-update", list_id, item_id)
