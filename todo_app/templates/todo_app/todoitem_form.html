@@ -12,11 +12,12 @@
     <input
         value="Submit"
         type="submit">
-    <input
+    
+        {% if object %}
+        <input
         value="Cancel"
         type="button"
         onclick="location.href='{% url "list" todo_list.id %}'">
-        {% if object %}
         <input
             value="Delete this item"
             type="button"
