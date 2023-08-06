@@ -9,19 +9,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--Simple.css-->
     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
-    <title>Django To-do Lists</title>
+    <title>Stone Hedge Tech's To-do Lists</title>
 </head>
 
 <body>
     <div>
-        <h1 onclick="location.href='{% url "index" %}'">Django To-do Lists</h1>
+        <h1 onclick="location.href='{% url "index" %}'">Stone Hedge Tech's To-do Lists</h1>
+        <div style="float: right; padding: 10px;">
+            {% if user.is_authenticated %}
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+            {% endif %}
+        </div>
     </div>
     <div>
         {% block content %}
         This content will be replaced by different html code for each page.
         {% endblock %}
     </div>
-
 </body>
 
 </html>
