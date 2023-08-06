@@ -98,12 +98,22 @@ class ItemUpdate(UpdateView):
         context = super().get_context_data(**kwargs)
         todo_list = self.object.todo_list
         if self.object.owner != self.request.user:
-            return redirect("index")
-        context["title"] = f"Update {self.object.title}"
+            context["different_user"] = True
+        else:
+            context["different_user"] = False
+            context["title"] = f"Update {self.object.title}"
+        context[
+            "todo_list"
+        ] = todo_list  # Add this line to include the todo_list object in the context
         return context
 
     def get_success_url(self) -> str:
-        return reverse("list", args=[self.object.todo_list_id])
+        # Check if todo_list_id exists and is not None
+        if self.object.todo_list_id:
+            return reverse("list", args=[self.object.todo_list_id])
+        else:
+            # Handle the case when todo_list_id is not available or None
+            return reverse("index")
 
 
 @method_decorator(login_required, name="dispatch")

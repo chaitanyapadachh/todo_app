@@ -4,30 +4,23 @@
 {% block content %}
 
 <h3>{{ title }}</h3>
+
+{% if different_user %}
+<p>Sorry, you are not the owner of this item and cannot update it.</p>
+{% else %}
 <form method="post">
     {% csrf_token %}
     <table>
         {{ form.as_table }}
     </table>
-    <input
-        value="Submit"
-        type="submit">
+    <input value="Submit" type="submit">
     
-        {% if object %}
-        <input
-        value="Cancel"
-        type="button"
-        onclick="location.href='{% url "list" todo_list.id %}'">
-        <input
-            value="Delete this item"
-            type="button"
-            onclick="location.href=
-            '{% url "item-delete" todo_list.id object.id %}'">
-        <input
-        value="Mark as done"
-        type="button"
-        onclick="location.href='{% url "item-mark-done" todo_list.id object.id %}'">
+    {% if object %}
+    <input value="Cancel" type="button" onclick="location.href='{% url "list" todo_list.id %}'">
+    <input value="Delete this item" type="button" onclick="location.href='{% url "item-delete" todo_list.id object.id %}'">
+    <input value="Mark as done" type="button" onclick="location.href='{% url "item-mark-done" todo_list.id object.id %}'">
     {% endif %}
 </form>
+{% endif %}
 
 {% endblock %}
